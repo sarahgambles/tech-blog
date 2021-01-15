@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User, Post, Comment } = require('../../models');
+const { User } = require('../../models');
 
 router.post('/', (req, res) => {
     User.create({
@@ -61,9 +61,8 @@ router.post('/login', (req, res) => {
         }
     });
 
-    router.put('/:id', (req, res) => {
-        User.update(req.body, {
-            individualHooks: true,
+    router.delete('/user/:id', (req, res) => {
+        User.destroy({
             where: {
                 id: req.params.id
             }
