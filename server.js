@@ -21,11 +21,13 @@ const sess = {
 
 app.use(session(sess));
 
-const helpers = require('./utils/helpers');
-
-const hbs = exphbs.create({});
-
-const routes = require('./controllers');
+const hbs = exphbs.create({
+    helpers: {
+        format_date: date => {
+            return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+        }
+    }
+});
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
@@ -36,8 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(require('./controllers/'));
 
-app.use(routes);
-
-sequelize.sync({ force: false }).then(() => {
-    app.listen(PORT, () => console.log('Now listening'));
+app.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}!`);
+    sequelize.sync({ force: false });
 });
